@@ -8,6 +8,7 @@
 #include "libtww/include/d/com/d_com_inf_game.h"
 #include "libtww/include/d/a/d_a_player_main.h"
 #include "gz_flags.h"
+#include "utils/link.h"
 #include "rels/include/defines.h"
 
 bool g_commandStates[COMMANDS_AMNT];
@@ -44,13 +45,7 @@ void GZCmd_storePosition() {
 }
 
 void GZCmd_loadPosition() {
-    if (dComIfGp_getPlayer(0)) {
-        dComIfGp_getPlayer(0)->current.pos = sSavePlayerPos;
-        dComIfGp_getPlayer(0)->current.angle.y = sSavePlayerAngle;
-        l_debug_keep_pos = sSavePlayerPos;
-        l_debug_current_angle.y = sSavePlayerAngle;
-        l_debug_shape_angle.y = sSavePlayerAngle;
-    }
+    GZ_setPlayerPosAndAngleY(&sSavePlayerPos, sSavePlayerAngle);
 }
 
 void GZCmd_moonJump() {

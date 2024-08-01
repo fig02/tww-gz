@@ -112,3 +112,26 @@ KEEP_FUNC void GZ_displayZombieHoverInfo() {
     Font::GZ_drawStr(a_presses_str, g_spriteOffsets[SPR_ZH_INFO_INDEX].x, g_spriteOffsets[SPR_ZH_INFO_INDEX].y, zombieHoverColor(numAPressesPerWindow), g_dropShadows);
     Font::GZ_drawStr(b_presses_str, g_spriteOffsets[SPR_ZH_INFO_INDEX].x, g_spriteOffsets[SPR_ZH_INFO_INDEX].y + 20.0f, zombieHoverColor(numBPressesPerWindow), g_dropShadows);
 }
+
+KEEP_FUNC void GZ_setPlayerPos(Vec* pos) {
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+
+    if (player != nullptr) {
+        player->current.pos = *pos;
+        l_debug_keep_pos = *pos;
+    }
+}
+
+KEEP_FUNC void GZ_setPlayerAngleY(s16 angle) {
+    fopAc_ac_c* player = dComIfGp_getPlayer(0);
+
+    if (player != nullptr) {
+        player->shape_angle.y = player->current.angle.y = angle;
+        l_debug_shape_angle.y = l_debug_current_angle.y = angle;
+    }
+}
+
+KEEP_FUNC void GZ_setPlayerPosAndAngleY(Vec* pos, s16 angle) {
+    GZ_setPlayerPos(pos);
+    GZ_setPlayerAngleY(angle);
+}
