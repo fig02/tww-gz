@@ -1,10 +1,46 @@
 #include "libtww/include/d/com/d_com_inf_game.h"
 #include "libtww/include/d/com/d_com_static.h"
+#include "libtww/include/d/d_procname.h"
 
 #include "flags.h"
 #include "save_manager.h"
 #include "save_specials.h"
 #include "rels/include/defines.h"
+#include "events/pre_loop_listener.h"
+
+typedef enum ActorMoveType {
+    ACTORMOVE_POS,
+    ACTORMOVE_POS_YAW,
+} ActorMoveType;
+
+typedef struct {
+    f32 x, y, z;
+    s16 yaw;
+} ActorMoveArgs;
+
+KEEP_FUNC void SaveMngSpecial_MoveActor(s16 procName, ActorMoveArgs* args, ActorMoveType type) {
+    fopAc_ac_c* actor = fopAcM_SearchByName(procName);
+
+    // If actor is NULL at this point, the actor doesn't exist yet and may still be creating
+    if (actor != nullptr) {
+        switch (type) {
+            case ACTORMOVE_POS_YAW:
+                actor->current.angle.y = actor->shape_angle.y = args->yaw;
+                // FALLTHROUGH
+            case ACTORMOVE_POS:
+                    actor->current.pos.set(args->x, args->y, args->z);
+
+        }
+    }
+}
+
+KEEP_FUNC void SaveMngSpecial_RequestMoveActor(s16 procName, ActorMoveArgs* args, ActorMoveType type) {
+    auto callback = [procName, args, type](){
+        SaveMngSpecial_MoveActor(procName, args, type);
+    };
+    
+    g_PreLoopListener->addListener((PreLoopCallback_t*)&callback);
+}
 
 KEEP_FUNC void SaveMngSpecial_ForestOfFairies_FirstVisit() {
     gSaveManager.injectDefault_during();
@@ -34,13 +70,16 @@ KEEP_FUNC void SaveMngSpecial_Windfall_Day0() {
 KEEP_FUNC void SaveMngSpecial_BombsSwim_After() {
     gSaveManager.injectDefault_after();
 
-    fopAc_ac_c* ship_p = g_dComIfG_gameInfo.play.mpPlayerPtr[2];
+    ActorMoveArgs args = {196459.0f, 0.0f, -199693.0f, 0x623E};
+    SaveMngSpecial_RequestMoveActor(PROC_SHIP, &args, ACTORMOVE_POS_YAW);
 
-    if (ship_p != nullptr) {
-        // set KorL's pos and angle to be the same as when the Wind Waker cutscene ends
-        ship_p->current.pos.set(196459.0f, 0.0f, -199693.0f);
-        ship_p->current.angle.y = ship_p->shape_angle.y = 0x623E;
-    }
+    // fopAc_ac_c* ship_p = g_dComIfG_gameInfo.play.mpPlayerPtr[2];
+
+    // if (ship_p != nullptr) {
+    //     // set KorL's pos and angle to be the same as when the Wind Waker cutscene ends
+    //     ship_p->current.pos.set(196459.0f, 0.0f, -199693.0f);
+    //     ship_p->current.angle.y = ship_p->shape_angle.y = 0x623E;
+    // }
 }
 
 KEEP_FUNC void SaveMngSpecial_DTCS() {
