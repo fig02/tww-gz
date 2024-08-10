@@ -17,6 +17,7 @@
 #include "events/draw_listener.h"
 #include "events/pre_loop_listener.h"
 #include "events/post_loop_listener.h"
+#include "events/actor_move_listener.h"
 
 namespace twwgz::modules {
 void main() {
@@ -52,6 +53,8 @@ void main() {
     g_PostLoopListener = new PostLoopListener();
     g_PostLoopListener->addListener(GZ_handleFlags_PostLoop);
     g_PostLoopListener->addListener(GZ_setCursorColor);
+
+    g_ActorMoveListener = new ActorMoveListener();
 }
 void exit() {}
 

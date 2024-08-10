@@ -21,6 +21,7 @@
 #include "events/draw_listener.h"
 #include "events/pre_loop_listener.h"
 #include "events/post_loop_listener.h"
+#include "events/actor_move_listener.h"
 
 #define isWidescreen (false)
 
@@ -73,6 +74,7 @@ extern "C" {
 KEEP_FUNC void game_loop() {
     // Call all the functions registered to be run before the main loop.
     g_PreLoopListener->dispatchAll();
+    g_ActorMoveListener->dispatchAll();
 }
 
 /**

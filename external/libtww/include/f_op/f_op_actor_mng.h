@@ -62,4 +62,6 @@ inline csXyz* fopAcM_GetAngle_p(fopAc_ac_c* i_actor) {
     return &i_actor->current.angle;
 }
 
+LIBTWW_DEFINE_FUNC(fopAcM_SearchByName__FsPP10fopAc_ac_c, fopAc_ac_c*, fopAcM_SearchByName, (s16))
+
 #endif
