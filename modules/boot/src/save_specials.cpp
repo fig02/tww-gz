@@ -5,7 +5,6 @@
 #include "flags.h"
 #include "save_manager.h"
 #include "save_specials.h"
-#include "actor_move_manager.h"
 #include "rels/include/defines.h"
 #include "utils/link.h"
 
@@ -37,7 +36,7 @@ KEEP_FUNC void SaveMngSpecial_Windfall_Day0() {
 KEEP_FUNC void SaveMngSpecial_BombsSwim_After() {
     gSaveManager.injectDefault_after();
     // Set KoRL's pos and angle to be the same as when the Wind Waker cutscene ends
-    gActorMoveMgr.SetPosYaw(PROC_SHIP, 196459.0f, 0.0f, -199693.0f, 0x623E);
+    //gActorMoveMgr.SetPosYaw(PROC_SHIP, 196459.0f, 0.0f, -199693.0f, 0x623E);
     
 }
 
@@ -805,7 +804,7 @@ KEEP_FUNC void SaveMngSpecial_WindJS() {
 }
 
 KEEP_FUNC void SaveMngSpecial_WindJSAfter() {
-    gActorMoveMgr.SetPosYaw(PROC_PLAYER, 9285.0f, -4630.1f, 191.0f, 0x267B);
+    // gActorMoveMgr.SetPosYaw(PROC_PLAYER, 9285.0f, -4630.1f, 191.0f, 0x267B);
 }
 
 KEEP_FUNC void SaveMngSpecial_Molgera() {
@@ -817,7 +816,7 @@ KEEP_FUNC void SaveMngSpecial_Molgera() {
 
 KEEP_FUNC void SaveMngSpecial_Tingle() {
     gSaveManager.injectDefault_after();
-    gActorMoveMgr.SetPosYaw(PROC_PLAYER, -100017.0f, 515.9f, -79676.0f, 0x8000);
+    // gActorMoveMgr.SetPosYaw(PROC_PLAYER, -100017.0f, 515.9f, -79676.0f, 0x8000);
 }
 
 KEEP_FUNC void SaveMngSpecial_Headstone() {
@@ -829,10 +828,10 @@ KEEP_FUNC void SaveMngSpecial_Headstone() {
 
 KEEP_FUNC void SaveMngSpecial_SubSix() {
     gSaveManager.injectDefault_after();
-    gActorMoveMgr.SetPosYaw(PROC_SHIP, 196459.0f, 0.0f, -199693.0f, 0x623E);
-    gActorMoveMgr.SetPosYaw(PROC_BK, 196459.0f, 0.0f, -199693.0f, 0x623E);
-    gActorMoveMgr.SetPosYaw(PROC_BK, 196459.0f, 0.0f, -199693.0f, 0x623E);
-    gActorMoveMgr.SetPosYaw(PROC_PLAYER, -89397.0f, 2100.0f, 104722.0f, 0x6000);
+    // gActorMoveMgr.SetPosYaw(PROC_SHIP, 196459.0f, 0.0f, -199693.0f, 0x623E);
+    // gActorMoveMgr.SetPosYaw(PROC_BK, 196459.0f, 0.0f, -199693.0f, 0x623E);
+    // gActorMoveMgr.SetPosYaw(PROC_BK, 196459.0f, 0.0f, -199693.0f, 0x623E);
+    // gActorMoveMgr.SetPosYaw(PROC_PLAYER, -89397.0f, 2100.0f, 104722.0f, 0x6000);
 }
 
 KEEP_FUNC void SaveMngSpecial_CyclopSwim() {

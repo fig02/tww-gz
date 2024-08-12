@@ -127,15 +127,3 @@ KEEP_FUNC void GZ_displayZombieHoverInfo() {
     Font::GZ_drawStr(b_presses_str, g_spriteOffsets[SPR_ZH_INFO_INDEX].x, g_spriteOffsets[SPR_ZH_INFO_INDEX].y + 20.0f,
                      zombieHoverColor(numBPressesPerWindow), g_dropShadows);
 }
-
-KEEP_FUNC void GZ_setPlayerPosAndAngle(cXyz* pos, s16 angle) {
-    fopAc_ac_c* player = dComIfGp_getPlayer(0);
-
-    if (player != nullptr) {
-        player->current.pos = *pos;
-        player->shape_angle.y = player->current.angle.y = angle;
-        
-        l_debug_keep_pos = *pos;
-        l_debug_shape_angle.y = l_debug_current_angle.y = angle;
-    }
-}

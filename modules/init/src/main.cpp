@@ -47,7 +47,6 @@ void main() {
     g_PreLoopListener->addListener(GZ_setCursorColor);
     g_PreLoopListener->addListener(GZ_handleRelTools);
     g_PreLoopListener->addListener(GZ_drawPolygons);
-    g_PreLoopListener->addListener(GZ_updateActorMoveMgr);
 
     // Init the post-loop listener
     g_PostLoopListener = new PostLoopListener();

@@ -26,7 +26,6 @@ void GZ_handleMenu();
 void GZ_renderMenuTitle();
 void GZ_displaySplash();
 void GZ_handleFlags_PreLoop();
-void GZ_updateActorMoveMgr();
 void GZ_handleFlags_PostLoop();
 
 extern "C" {
