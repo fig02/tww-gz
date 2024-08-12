@@ -9,6 +9,7 @@ KEEP_FUNC PracticeMenu::PracticeMenu(Cursor& cursor)
                         {"any\%", ANY_PERCENT, "Load an any\% save (asterisks are for sail/pg skip route files)",
                          false},
                         {"ad", ALL_DUNGEONS, "Load an all dungeons save", false},
+                        {"100\% early drc", HUNDO, "Load a 100\% early drc save", false},
                     } {}
 
 PracticeMenu::~PracticeMenu() {}
@@ -29,6 +30,9 @@ void PracticeMenu::draw() {
             return;
         case ALL_DUNGEONS:
             g_menuMgr->push(MN_AD_SAVES_INDEX);
+            return;
+        case HUNDO:
+            g_menuMgr->push(MN_HUNDO_SAVES_INDEX);
             return;
         }
     }

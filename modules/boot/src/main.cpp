@@ -21,6 +21,7 @@
 #include "events/draw_listener.h"
 #include "events/pre_loop_listener.h"
 #include "events/post_loop_listener.h"
+#include "actor_move_manager.h"
 
 #define isWidescreen (false)
 
@@ -203,4 +204,9 @@ KEEP_FUNC void GZ_displaySplash() {
         // Then when splash_time hits < 1, it won't display the string or logo anymore
         splash_time--;
     }
+}
+
+
+KEEP_FUNC void GZ_updateActorMoveMgr() {
+    gActorMoveMgr.ProcessRequests();
 }

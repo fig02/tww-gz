@@ -6,6 +6,7 @@ enum {
     ANY_NO_MSS,
     ANY_PERCENT,
     ALL_DUNGEONS,
+    HUNDO,
 
     PRACTICE_MENU_NUM,
 };

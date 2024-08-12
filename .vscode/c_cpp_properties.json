@@ -76,7 +76,8 @@
                 "${workspaceFolder}/modules/boot/include/**",
                 "${workspaceFolder}/modules/**",
                 "${workspaceFolder}/common/**",
-                "${workspaceFolder}/external/**"
+                "${workspaceFolder}/external/**",
+                "${workspaceFolder}/external/libtww/include/SSystem/SComponent"
             ],
             "defines": [
                 "NTSCJ",
@@ -104,7 +105,7 @@
                 "-meabi",
                 "-mhard-float"
             ]
-        },
+        }
     ],
     "version": 4
 }

@@ -32,6 +32,10 @@ iso = "@TWWGZ_CFG_BLD_ISO@"
 "twwgz/save_files/all_dungeons.bin" = "../res/save_files/all_dungeons.bin"
 "twwgz/save_files/all_dungeons" = "../res/save_files/all_dungeons"
 
+# 100% Early DRC saves
+"twwgz/save_files/hundo.bin" = "../res/save_files/hundo.bin"
+"twwgz/save_files/hundo" = "../res/save_files/hundo"
+
 # menu
 "twwgz/mn/Menu1.dat" = "../res/menu/EN_Menu1.dat"
 
