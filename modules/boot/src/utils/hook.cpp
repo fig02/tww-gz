@@ -6,7 +6,9 @@
 #include "scene.h"
 #include "save_manager.h"
 #include "geometry_draw.h"
+#include "events/pre_loop_listener.h"
 #include "libtww/include/addrs.h"
+#include "libtww/include/d/d_procname.h"
 #include "libtww/include/f_op/f_op_scene_req.h"
 #include "libtww/include/SSystem/SComponent/c_phase.h"
 #include "rels/include/patch.h"
@@ -26,10 +28,12 @@ HOOK_DEF(int, dScnPly_Draw, (void*));
 HOOK_DEF(void, putSave, (void*, int));
 HOOK_DEF(int, dScnPly__phase_1, (void*));
 HOOK_DEF(int, dScnPly__phase_4, (void*));
+HOOK_DEF(int, dScnPly_Delete, (void*));
 HOOK_DEF(void, setDaytime, (void*));
 HOOK_DEF(void, BeforeOfPaint, (void));
 HOOK_DEF(void, dCcS__draw, (dCcS*));
 HOOK_DEF(void, dCcS__MoveAfterCheck, (dCcS*));
+HOOK_DEF(BOOL, dScnLogo_Delete, (void*));
 
 namespace Hook {
 void gameLoopHook(void) {
@@ -73,11 +77,20 @@ int dScnPly__phase_1Hook(void* i_scene) {
 int dScnPly__phase_4Hook(void* i_scene) {
     int ret = dScnPly__phase_4Trampoline(i_scene);
 
-SaveManager::applyAfterOptions();
+    if (fpcM_GetName(i_scene) == PROC_OPENING_SCENE) {
+        g_PreLoopListener->addListener(GZ_endlessNightOnTitle);
+    }
 
     return ret;
 }
 
+int dScnPly_DeleteHook(void* i_scene) {
+    if (fpcM_GetName(i_scene) == PROC_OPENING_SCENE) {
+        g_PreLoopListener->removeListener(GZ_endlessNightOnTitle);
+    }
+
+    return dScnPly_DeleteTrampoline(i_scene);
+}
 
 #ifdef NTSCU
 #define menu_data_path (char*)0x80362DAA
@@ -130,6 +143,11 @@ void dCcSMoveAfterCheckHook(dCcS* i_this) {
     return dCcS__MoveAfterCheckTrampoline(i_this);
 }
 
+BOOL dScnLogo_DeleteHook(void* i_this) {
+    GZ_handleCardLoad();
+    return dScnLogo_DeleteTrampoline(i_this);
+}
+
 #define draw_console draw__17JUTConsoleManagerCFv
 #define f_fapGm_Execute fapGm_Execute__Fv
 
@@ -142,10 +160,12 @@ int dScnPly_Draw__FP13dScnPly_ply_c(void*);
 void putSave__10dSv_info_cFi(void*, int);
 int phase_1__FP13dScnPly_ply_c(void*);
 int phase_4__FP13dScnPly_ply_c(void*);
+int dScnPly_Delete__FP13dScnPly_ply_c(void*);
 void setDaytime__18dScnKy_env_light_cFv(void*);
 void dScnPly_BeforeOfPaint__Fv();
 void Draw__4dCcSFv(dCcS*);
 void MoveAfterCheck__4dCcSFv(dCcS*);
+BOOL dScnLogo_Delete__FP10dScnLogo_c(void*);
 }
 
 KEEP_FUNC void applyHooks() {
@@ -159,10 +179,12 @@ KEEP_FUNC void applyHooks() {
     APPLY_HOOK(putSave, &putSave__10dSv_info_cFi, putSaveHook);
     APPLY_HOOK(dScnPly__phase_1, &phase_1__FP13dScnPly_ply_c, dScnPly__phase_1Hook);
     APPLY_HOOK(dScnPly__phase_4, &phase_4__FP13dScnPly_ply_c, dScnPly__phase_4Hook);
+    APPLY_HOOK(dScnPly_Delete, &dScnPly_Delete__FP13dScnPly_ply_c, dScnPly_DeleteHook);
     APPLY_HOOK(setDaytime, &setDaytime__18dScnKy_env_light_cFv, setDaytimeHook);
     APPLY_HOOK(BeforeOfPaint, &dScnPly_BeforeOfPaint__Fv, beforeOfPaintHook);
     APPLY_HOOK(dCcS__draw, &Draw__4dCcSFv, dCcSDrawHook);
     APPLY_HOOK(dCcS__MoveAfterCheck, &MoveAfterCheck__4dCcSFv, dCcSMoveAfterCheckHook);
+    APPLY_HOOK(dScnLogo_Delete, &dScnLogo_Delete__FP10dScnLogo_c, dScnLogo_DeleteHook);
 
 #undef APPLY_HOOK
 }
