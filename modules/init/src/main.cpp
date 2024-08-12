@@ -35,13 +35,13 @@ void main() {
     g_drawListener->addListener(GZ_renderFifoQueue);
     g_drawListener->addListener(GZ_displayLinkInfo);
     g_drawListener->addListener(GZ_displayTimeInfo);
+    g_drawListener->addListener(GZ_frameCounter);
     g_drawListener->addListener(GZ_displayZombieHoverInfo);
     g_drawListener->addListener(GZ_displaySplash);
     g_drawListener->addListener(GZ_drawWatches);
 
     // Init the pre-loop listener
     g_PreLoopListener = new PreLoopListener();
-    g_PreLoopListener->addListener(GZ_handleCardLoad);
     g_PreLoopListener->addListener(GZ_handleMenu);
     g_PreLoopListener->addListener(GZ_handleFlags_PreLoop);
     g_PreLoopListener->addListener(GZ_setCursorColor);
