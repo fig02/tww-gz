@@ -12,6 +12,18 @@
 
 // =================== UTILITIES ===================
 
+enum {
+    DAY_SUNDAY,
+    DAY_MONDAY,
+    DAY_TUESDAY,
+    DAY_WEDNESDAY,
+    DAY_THURSDAY,
+    DAY_FRIDAY,
+    DAY_SATURDAY,
+};
+
+#define HOUR_TO_TIME(hour) (hour * 15.0f)
+
 void SaveMngSpecial_SetActorPos(fopAc_ac_c* actor, f32 x, f32 y, f32 z) {
     actor->current.pos.set(x, y, z);
 
@@ -29,6 +41,11 @@ inline void SaveMngSpecial_SetActorRot(fopAc_ac_c* actor, s16 xRot, s16 yRot, s1
 
 inline void SaveMngSpecial_SetActorYaw(fopAc_ac_c* actor, s16 yRot) {
     actor->current.angle.y = actor->shape_angle.y = yRot;
+}
+
+inline void SaveMngSpecial_SetActorPosAndYaw(fopAc_ac_c* actor, f32 x, f32 y, f32 z, s16 yRot) {
+    SaveMngSpecial_SetActorPos(actor, x, y, z);
+    SaveMngSpecial_SetActorYaw(actor, yRot);
 }
 
 inline void SaveMngSpecial_SetHealth(u16 health) {
@@ -172,8 +189,7 @@ KEEP_FUNC void SaveMngSpecial_BombsSwim_NoMSS() {
     SaveMngSpecial_SetLayer0();
 
     gSaveManager.modifyActor(PROC_SHIP, [](fopAc_ac_c* actor) {
-        SaveMngSpecial_SetActorPos(actor, 196459.0f, 0.0f, -199693.0f);
-        SaveMngSpecial_SetActorYaw(actor, 0x623E);
+        SaveMngSpecial_SetActorPosAndYaw(actor, 196459.0f, 0.0f, -199693.0f, 0x623E);
     });
 }
 
@@ -354,12 +370,9 @@ KEEP_FUNC void SaveMngSpecial_PGSkip_AD() {
 // =================== 100% FUNCTIONS ===================
 
 KEEP_FUNC void SaveMngSpecial_MSS_100() {
-    // TODO: use new actor move system when it exists
-    // fopAc_ac_c* player_p = g_dComIfG_gameInfo.play.mpPlayerPtr[0];
-    //     if (player_p != nullptr) {
-    //     player_p->current.pos.set(-195402.0f, 1650.0f, 313668.0f);
-    //     player_p->current.angle.y = player_p->shape_angle.y = 0x0;
-    // }
+    gSaveManager.modifyActor(PROC_PLAYER, [](fopAc_ac_c* actor) {
+        SaveMngSpecial_SetActorPosAndYaw(actor, -195402.0f, 1650.0f, 313668.0f, 0x0000);
+    });
 }
 
 KEEP_FUNC void SaveMngSpecial_RockJump_100() {
@@ -714,8 +727,10 @@ KEEP_FUNC void SaveMngSpecial_WindChart_100() {
 KEEP_FUNC void SaveMngSpecial_WindJS_100() {
     g_dComIfG_gameInfo.play.mNextStage.setRoomNo(11);
     g_dComIfG_gameInfo.play.mNextStage.setPoint(11);
-    // TODO: Use new actor mod system when it exists
-    // gActorMoveMgr.SetPosYaw(PROC_PLAYER, 9285.0f, -4630.1f, 191.0f, 0x267B);
+
+    gSaveManager.modifyActor(PROC_PLAYER, [](fopAc_ac_c* actor) {
+        SaveMngSpecial_SetActorPosAndYaw(actor, 9285.0f, -4630.1f, 191.0f, 0x267B);
+    });
 }
 
 KEEP_FUNC void SaveMngSpecial_Molgera_100() {
@@ -725,8 +740,9 @@ KEEP_FUNC void SaveMngSpecial_Molgera_100() {
 }
 
 KEEP_FUNC void SaveMngSpecial_Tingle_100() {
-    // TODO: Use new actor mod system when it exists
-    // gActorMoveMgr.SetPosYaw(PROC_PLAYER, -100017.0f, 515.9f, -79676.0f, 0x8000);
+    gSaveManager.modifyActor(PROC_PLAYER, [](fopAc_ac_c* actor) {
+        SaveMngSpecial_SetActorPosAndYaw(actor, -100017.0f, 515.9f, -79676.0f, 0x8000);
+    });
 }
 
 KEEP_FUNC void SaveMngSpecial_Headstone_100() {
@@ -735,21 +751,36 @@ KEEP_FUNC void SaveMngSpecial_Headstone_100() {
     g_dComIfG_gameInfo.play.mNextStage.setPoint(0);
 }
 
+KEEP_FUNC void* Headstone100_FindBoko1(void* proc, void* data) {
+    fopAc_ac_c* actor = (fopAc_ac_c*)proc;
+    return (actor->mBase.mProcName == PROC_BK && actor->shape_angle.y == 0x9168) ? actor : NULL;
+}
+
+KEEP_FUNC void* Headstone100_FindBoko2(void* proc, void* data) {
+    fopAc_ac_c* actor = (fopAc_ac_c*)proc;
+    return (actor->mBase.mProcName == PROC_BK && actor->shape_angle.y == 0x2E38) ? actor : NULL;
+}
+
 KEEP_FUNC void SaveMngSpecial_SubSix_100() {
-    // TODO: Use new actor mod system when it exists
-    // gActorMoveMgr.SetPosYaw(PROC_SHIP, 196459.0f, 0.0f, -199693.0f, 0x623E);
-    // gActorMoveMgr.SetPosYaw(PROC_BK, 196459.0f, 0.0f, -199693.0f, 0x623E);
-    // gActorMoveMgr.SetPosYaw(PROC_BK, 196459.0f, 0.0f, -199693.0f, 0x623E);
-    // gActorMoveMgr.SetPosYaw(PROC_PLAYER, -89397.0f, 2100.0f, 104722.0f, 0x6000);
+    // Delete both bokos on the platform
+    // TODO: fig will figure out why this crashes
+    // gSaveManager.modifyActor(Headstone100_FindBoko1, [](fopAc_ac_c* actor) { fopAcM_delete(actor); });
+    // gSaveManager.modifyActor(Headstone100_FindBoko2, [](fopAc_ac_c* actor) { fopAcM_delete(actor); });
+
+    // Move Link and KoRL
+    gSaveManager.modifyActor(PROC_PLAYER, [](fopAc_ac_c* actor) {
+        SaveMngSpecial_SetActorPosAndYaw(actor, -89397.0f, 2100.0f, 104722.0f, 0x6000);
+    });
+
+    gSaveManager.modifyActor(PROC_SHIP, [](fopAc_ac_c* actor) {
+        SaveMngSpecial_SetActorPosAndYaw(actor, 196459.0f, 0.0f, -199693.0f, 0x623E);
+    });
 }
 
 KEEP_FUNC void SaveMngSpecial_CyclopSwim_100() {
-    // TODO: Use new actor mod system when it exists
-    // fopAc_ac_c* player_p = g_dComIfG_gameInfo.play.mpPlayerPtr[0];
-    //     if (player_p != nullptr) {
-    //     player_p->current.pos.set(-80095.0f, 1128.4f, 20019.0f);
-    //     player_p->current.angle.y = player_p->shape_angle.y = 0x31C4;
-    // }
+    gSaveManager.modifyActor(PROC_PLAYER, [](fopAc_ac_c* actor) {
+        SaveMngSpecial_SetActorPosAndYaw(actor, -80095.0f, 1128.4f, 20019.0f, 0x31C4);
+    });
 }
 
 KEEP_FUNC void SaveMngSpecial_Overlook_100() {
